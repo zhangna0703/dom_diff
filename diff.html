@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="box"></div>
+    <script>
+        //请用递归的方式遍历树形数据结构中的每一个节点
+        const options = [{
+            value: 'zhejiang',
+            label: 'Zhejiang',
+            children: [{
+                value: 'hangzhou',
+                label: 'Hangzhou',
+                children: [{
+                    value: 'xihu',
+                    label: 'West Lake'
+                }]
+            }]
+        },{
+            value: 'jiangsu',
+            label: 'Jiangsu',
+            children: [{
+                value: 'nanjing',
+                label: 'Nanjing',
+                children: [{
+                    value: 'zhonghuamen',
+                    label: 'Zhong Hua Men',
+                    children: [{
+                        value: 'xiaoqu',
+                        label: 'Zhong Hua Men'
+                    }]
+                }]
+            }]
+        }];
+        let newArr = []
+        function fn(options){
+            options.forEach((item,ind)=>{
+                newArr.push(item.value)
+                if(item.children){
+                   fn(item.children)
+                }
+            })
+            return newArr
+        }
+        console.log(fn(options))
+        //2.将类似以下JSON表示的树状结构(可以无限层级)通过parseDOM函数(使用document.createElement,document.createTextNode,appendChild等方法)生成一颗DOM树(返回一个element元素)
+        const JsonTree=[{
+            "tagName":"ul",
+            "props":{
+                "className":"list",
+                "data-name":"jsontree"
+            },
+            "children": 'baby'
+        },{
+            "tagName":"div",
+            "props":{
+                "className":"list",
+                "target":"_blank"
+            },
+            "children":[{
+                "tagName":"a",
+                "props":{
+                    "href":"https://www.aliyun.com",
+                    "data-name":"jsontree"
+                },
+                "children":'happy'
+            }]
+        }]
+        var box = document.querySelector('.box')
+        function fun(JsonTree,parent){
+            JsonTree.forEach((item,ind)=>{
+                var element = document.createElement(item.tagName);
+                if(typeof(item.children) === 'string'){
+                    element.innerHTML = item.children
+                }else if(Array.isArray(item.children)){
+                    fun(item.children,element)
+                }
+                if(item.props){
+                    for(var i in item.props){
+                        element[i] = item.props[i];
+                    }
+                }
+                parent.appendChild(element)
+            })
+        }
+        fun(JsonTree,box)
+    </script>
+</body>
+
+</html>
